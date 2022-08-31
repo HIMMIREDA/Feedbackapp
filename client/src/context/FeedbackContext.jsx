@@ -8,7 +8,7 @@ const FeedbackContext=createContext();
 
 
 export function FeedbackProvider({children}){
-    const API_URL="http://192.168.1.111:5000/feedback";
+    const API_URL=process.env.REACT_APP_API_ENDPOINT;
     const [isLoading,setIsLoading]=useState(true);
     const [feedback,setFeedback]=useState([]);
     const [feedbackEdit,setFeedbackEdit]=useState({
@@ -84,7 +84,7 @@ export function FeedbackProvider({children}){
 
 
     const fetchFeedback=async (page,limit)=>{
-        const response=await fetch(`/feedback?_sort=id&_order=desc&_page=${page}&_limit=${limit}`);
+        const response=await fetch(`${API_URL}/feedback?_sort=id&_order=desc&_page=${page}&_limit=${limit}`);
         let data;
         if(response.ok){
             data=await response.json();
@@ -117,7 +117,7 @@ export function FeedbackProvider({children}){
     const deleteFeedback=async (id)=>{
         
         if(window.confirm("Are you sure you want to delete this feedback ? ")){
-            await fetch(`/feedback/${id}`,{
+            await fetch(`${API_URL}/feedback/${id}`,{
                 method : "DELETE",
             });
             
@@ -138,7 +138,7 @@ export function FeedbackProvider({children}){
 
     const updateFeedback=async (newItem)=>{
         
-        const response= await fetch(`/feedback/${newItem.id}`,{
+        const response= await fetch(`${API_URL}/feedback/${newItem.id}`,{
             method:"PUT",
             headers:{
                 "Content-Type":"application/json"
@@ -157,7 +157,7 @@ export function FeedbackProvider({children}){
 
     // Add feedback
     const addFeedback=async (newFeed)=>{
-        const response = await fetch("/feedback",{
+        const response = await fetch(`${API_URL}/feedback`,{
             method:"POST",
             body:JSON.stringify(newFeed),
             headers:{
